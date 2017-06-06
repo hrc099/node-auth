@@ -1,9 +1,9 @@
 # Node Auth sample app #
 
-Just a simple app for practising working with MEAN stack
+* Just a simple app for practising working with MEAN stack
 
-Currently in progress
+* Currently in progress
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
+* Repository owner
