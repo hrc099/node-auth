@@ -2,6 +2,8 @@ var express = require('express');
 var multer = require('multer');
 var router = express.Router();
 
+var User = require('../models/user');
+
 // File upload setup
 var upload = multer({ dest: './uploads' });
 
@@ -43,7 +45,7 @@ router.post('/register', upload.single('profileimage'), function(req, res, next)
     var profileImageSize = req.file.size;
   } else {
     // Default slika
-    var profileImageName = 'noimage.png'
+    var profileImageName = 'noimage.png';
   }
 
   // Validacija
@@ -76,10 +78,10 @@ router.post('/register', upload.single('profileimage'), function(req, res, next)
     });
 
     // Create User
-    /*User.createUser(newUser, function(err, user){
+    User.createUser(newUser, function(err, user){
       if(err) throw err;
       console.log(user);
-    });*/
+    });
 
     // Success poruka
     req.flash('success','You are now registered and may log in');
