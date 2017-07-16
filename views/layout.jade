@@ -24,8 +24,9 @@ html
               a(href='/users/login') Log In
           ul.nav.navbar-nav.navbar-right
             li
-              a(href='/users/logut') Logout
+              a(href='/users/logout') Logout
     .container
+      != messages()
       block content
     
     script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js' integrity='sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=' crossorigin='anonymous')

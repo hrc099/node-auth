@@ -1,7 +1,8 @@
 var express = require('express');
 var multer = require('multer');
 var router = express.Router();
-
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/user');
 
 // File upload setup
@@ -86,9 +87,52 @@ router.post('/register', upload.single('profileimage'), function(req, res, next)
     // Success poruka
     req.flash('success','You are now registered and may log in');
     
-    res.location('/');
-    res.redirect('/');
+    res.location('/users/login');
+    res.redirect('/users/login');
   }
+});
+
+// used to serialize the user for the session
+passport.serializeUser(function(user, done) {
+    done(null, user.id); 
+   // where is this user.id going? Are we supposed to access this anywhere?
+});
+
+// used to deserialize the user
+passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+        done(err, user);
+    });
+});
+
+passport.use(new LocalStrategy(function(username, password, done){
+  User.getUserByUsername(username, function(err, user){
+    if(err) {return done(err);}
+    if(!user){
+      console.log('Unknown user');
+      return done(null, false, {message: 'Unknown user'});
+    }
+    User.comparePassword(password, user.password, function(err, isMatch) {
+      if (err) throw err;
+      if(isMatch) {
+        return done(null, user);
+      } else {
+        console.log('Invalid password');
+        return done(null, false, {message: 'Invalid password'});
+      }
+    });
+  });
+}));
+
+router.post('/login', passport.authenticate('local', { successRedirect: '/',
+  failureRedirect: '/users/login', successFlash: 'Logged in',
+  failureFlash: 'Username or password invalid' }));
+
+router.get('/logout', function(req, res) {
+  req.logout();
+  req.flash('success', 'You have logged out');
+  res.location('/users/login');
+  res.redirect('/users/login');
 });
 
 module.exports = router;

@@ -5,8 +5,6 @@ var logger = require('morgan');
 var expressValidator = require('express-validator');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
 var bodyParser = require('body-parser');
 var flash = require('connect-flash');
 var mongo = require('mongodb');
@@ -26,7 +24,7 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //Express sessions setup
 app.use(session({
@@ -36,6 +34,8 @@ app.use(session({
 }));
 
 //Passport
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 app.use(passport.initialize());
 app.use(passport.session());
 
